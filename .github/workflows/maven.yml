@@ -11,8 +11,8 @@ jobs: #groups set of actions that will be executed.
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3 #will checkout the repository in github first
     - name: Set up JDK 11 
+      uses: actions/checkout@v3 #will checkout the repository in github first
       with:
           java-version: '11' #java version used in this project.
           distribution: 'temurin'

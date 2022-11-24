@@ -24,13 +24,14 @@ jobs: #groups set of actions that will be executed.
      needs: build
      steps:
      - uses: actions/setup-java@v3 #prepares the environment with java 
+       with:
+          java-version: '11' #java version used in this project.
+          distribution: 'temurin'
+          cache: maven        
      - name: set up java 
        run: mvn -B test --file pom.xml
      - name: Build with Maven
        run: mvn -B package --file pom.xml #will run this command in maven
      - name: java version  
-       with:
-          java-version: '11' #java version used in this project.
-          distribution: 'temurin'
-          cache: maven        
+     
     

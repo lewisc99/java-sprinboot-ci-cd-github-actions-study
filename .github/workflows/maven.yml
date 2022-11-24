@@ -27,7 +27,7 @@ jobs: #groups set of actions that will be executed.
     - name: build and push the dockerimage  to dockerhub
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: lewiscontato99/mvc-testing
+        image: mvc-simple-test:latest
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}

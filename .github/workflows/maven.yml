@@ -9,7 +9,6 @@ on:
 
 jobs: #groups set of actions that will be executed.
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +19,33 @@ jobs: #groups set of actions that will be executed.
         java-version: '11' #java version used in this project.
         distribution: 'temurin'
         cache: maven
-    - name: test with Maven
-      run: mvn -B test --file pom.xml #will test this command in maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml #will run this command in maven
-    - name: docker login
-      run:
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build the docker Image
-      run: docker build . --file Dockerfile --tag lewiscontato99/mvc-testing
-    - name: Docker push to DockerHub
-      run: docker push lewiscontato99/mvc-testing
+        
+  java-test:
+     runs-on: ubuntu-latest
+     environment: java-test
+     needs: build
+     steps:
+        - name: test with Maven
+          run: mvn -B test --file pom.xml
+        - name: Build with Maven
+          run: mvn -B package --file pom.xml #will run this command in maven
+          
+          
+  java-prod:
+       runs-on: ubuntu-latest
+       environment: java-prod
+       needs: java-test
+       steps:
+       - name: docker login
+         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+       - name: Build the docker Image
+         run: docker build . --file Dockerfile --tag lewiscontato99/mvc-testing
+       - name: Docker push to DockerHub
+         run: docker push lewiscontato99/mvc-testing
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
-    
+        # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+       - name: Update dependency graph
+         uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+
+
+

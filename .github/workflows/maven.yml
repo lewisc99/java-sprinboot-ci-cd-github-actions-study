@@ -31,7 +31,11 @@ jobs: #groups set of actions that will be executed.
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-
+    - name: Build the docker Image
+      run: docker build . --file Dockerfile --tag lewiscontato99/mvc-testing
+      
+    - name: Docker push to DockerHub
+      run: docker push lewiscontato99/mvc-testing
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
